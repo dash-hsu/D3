@@ -1,0 +1,103 @@
+<html> 
+	<head> 
+        <meta charset="utf-8"> 
+        <title>Drawline</title> 
+	</head> 
+    <body> 
+         <script src="http://d3js.org/d3.v3.min.js" charset="Big-5"></script> 
+         <script> 
+			//step1 : data 必須要有 x 座標和 y 座標
+			var data = [
+			{x:10,y:10},
+			{x:50,y:100},
+			{x:60,y:50},
+			{x:100,y:30}
+			];
+			//step2 : data 餵給 SVG 的線條上的每個點
+			var svg = d3.select('body')
+			.append('svg')
+			.attr({
+			  'width': 800,
+			  'height': 800
+			});
+			//step3 : 使用 line().x() 以及 line().y()，讓座標由 data 長出來
+			var line1 = d3.svg.line() //line1 : 基本連線
+			. x(function(d) {
+			  return d.x;
+			})
+			.y(function(d) {
+			  return d.y;
+			});
+			
+			//step4 : 利用 append 的方式在 svg 裏頭放入一個 path，d 是用line(data)將 data 餵給剛剛的 line
+			svg.append('path')
+			.attr({
+			  'd': line1(data),
+			  'y': 0,
+			  'stroke': '#000',
+			  'stroke-width': '5px',
+			  'fill': 'none'
+			});
+			
+			//linear-closed - 封閉的線段。
+			var line2 = d3.svg.line() //line2~13 : 連線變形套用3 個模式可以設定連線模式
+			. x(function(d) {
+			  return d.x;
+			})
+			.y(function(d) {
+			  return d.y;
+			})
+			.interpolate('linear-closed'); 
+			
+			
+			svg.append('path')
+			.attr({
+			  'd': line2(data),
+			  'stroke': '#000',
+			  'stroke-width': '5px',
+			  'fill': 'none',
+			  'transform':'translate(0,130)'
+			});
+			svg.append("text")
+			.attr("x", 20)             
+			.attr("y", 20)
+			
+			.attr("text-anchor", "middle")  
+			.style("font-size", "16px") 
+			.style("text-decoration", "underline")
+			.attr("transform", "translate(30,160)")
+			.style('fill', 'darkOrange')
+			.text("linear-closed");
+			//step：一律以水平線段或垂直線段顯示，採中間點的方式做連接。
+			var line2 = d3.svg.line() 
+			. x(function(d) {
+			  return d.x;
+			})
+			.y(function(d) {
+			  return d.y;
+			})
+			.interpolate('step'); 
+			
+			
+			svg.append('path')
+			.attr({
+			  'd': line2(data),
+			  'stroke': '#000',
+			  'stroke-width': '5px',
+			  'fill': 'none',
+			  'transform':'translate(130,0)'
+			});
+			svg.append("text")
+			.attr("x", 20)             
+			.attr("y", 20)
+			
+			.attr("text-anchor", "middle")  
+			.style("font-size", "16px") 
+			.style("text-decoration", "underline")
+			.attr("transform", "translate(170,0)")
+			.style('fill', 'darkOrange')
+			.text("step");
+			
+		</script> 
+	</body> 
+</html>
